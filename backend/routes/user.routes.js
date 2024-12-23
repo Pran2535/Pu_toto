@@ -2,7 +2,7 @@ const express = require("express"); // express module ko require kiya for creati
 const router = express.Router(); // router instance banaya express ka
 const userController = require("../controllers/user.controller"); // user controller ko import kiya for handling user-related logic
 const { body } = require("express-validator"); // express-validator module se body middleware ko import kiya for request validation
-
+const authMiddleware = require("../middlewares/auth.middleware");
 // POST route banaya for user registration
 router.post(
   "/register", // "/register" endpoint par request aayegi
@@ -31,6 +31,7 @@ router.post(
   ],
   userController.loginUser // userController ka loginUser method call hoga
 );
+router.get("/profile", authMiddleware.authUser, userController.getUserProfile);
 
 // Router ko export karte hain taaki isse hum app me use kar saken
 module.exports = router;
