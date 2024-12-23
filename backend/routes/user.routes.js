@@ -21,5 +21,16 @@ router.post(
   userController.registerUser // userController ka registerUser method call hoga
 );
 
+router.post(
+  "/login",
+  [
+    body("email").isEmail().withMessage("Invalid Email"),
+    body("password")
+      .isLength({ min: 6 })
+      .withMessage("Password must be of length 6) 6"),
+  ],
+  userController.loginUser // userController ka loginUser method call hoga
+);
+
 // Router ko export karte hain taaki isse hum app me use kar saken
 module.exports = router;
