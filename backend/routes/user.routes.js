@@ -32,6 +32,6 @@ router.post(
   userController.loginUser // userController ka loginUser method call hoga
 );
 router.get("/profile", authMiddleware.authUser, userController.getUserProfile);
-
+router.get("/logout", authMiddleware.authUser, userController.logoutUser);
 // Router ko export karte hain taaki isse hum app me use kar saken
 module.exports = router;
