@@ -15,10 +15,12 @@ app.use(express.urlencoded({ extended: true }));
 // Routes ko middlewares ke baad define karo
 const userRoutes = require("./routes/user.routes");
 
+const captainRoutes = require("./routes/captain.routes");
 app.get("/", (req, res) => {
   res.send("hello pranav bhai backend sikh rahe ho ");
 });
 
 app.use("/user", userRoutes);
+app.use("/captains", captainRoutes);
 
 module.exports = app;
