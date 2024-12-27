@@ -29,7 +29,7 @@ module.exports.createCaptain = async ({
   }
 
   // Hash the password
-  const hashedPassword = await captainModel.hashPassword(password);
+  // const hashedPassword = await captainModel.hashPassword(password);
 
   // Create a new captain with vehicle information
   const captain = await captainModel.create({
@@ -38,7 +38,7 @@ module.exports.createCaptain = async ({
       lastname,
     },
     email,
-    password: hashedPassword,
+    password,
     vehicle: {
       color,
       plate,
