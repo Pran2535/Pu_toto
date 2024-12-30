@@ -77,7 +77,7 @@ setLastname('');
       <p className='text-center'> Already have an account? <Link  to={'/login'} className='text-blue-600'>Login here </Link></p> 
       </div>
       <div className="">
-        <p className='text-xs leading-tight'>By proceeding , you consent to get calls, whatsapp, or SMS messages, including by automated means ,from Putoto, and its affliates to the email provided </p>
+        <p className='text-xs leading-tight'>This site is protected by reCAPTCHA and the <span className='underline'>Google Privacy Policy </span> and terms of service apply </p>
       </div>
     </div>
   )
