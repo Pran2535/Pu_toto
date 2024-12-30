@@ -1,23 +1,30 @@
 const express = require("express"); // express module ko require karo
-//  ye module hame help karta hai server banane me
 const cookieParser = require("cookie-parser");
+const cors = require("cors"); // Import CORS
 const app = express();
 
-// ek app naam ka variable banate hai jisme humne express function ko dala hai
+// Database connection
 const connectToDb = require("./db/db");
 connectToDb();
 
-// Middlewares ko pehle define karo, routes se pehle
+// Use middlewares
+app.use(
+  cors({
+    origin: "http://localhost:5173", // Allow requests from your frontend
+    methods: ["GET", "POST", "PUT", "DELETE"], // Allowed methods
+    credentials: true, // Allow cookies if needed
+  })
+);
 app.use(express.json());
-app.use(cookieParser()); // cookieParser ko pehle move kiya
+app.use(cookieParser());
 app.use(express.urlencoded({ extended: true }));
 
-// Routes ko middlewares ke baad define karo
+// Routes
 const userRoutes = require("./routes/user.routes");
-
 const captainRoutes = require("./routes/captain.routes");
+
 app.get("/", (req, res) => {
-  res.send("hello pranav bhai backend sikh rahe ho ");
+  res.send("hello pranav bhai backend sikh rahe ho");
 });
 
 app.use("/user", userRoutes);
