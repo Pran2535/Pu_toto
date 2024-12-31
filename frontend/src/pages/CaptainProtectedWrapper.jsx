@@ -1,16 +1,50 @@
-import React from 'react';
-import { Navigate } from 'react-router-dom';
+import React, { useContext, useEffect, useState } from 'react';
+import { CaptainDataContext } from '../context/CaptainContext'; // Fixed typo in import
+import { useNavigate } from 'react-router-dom';
+import axios from 'axios';
 
-const CaptainProtectedWrapper = ({ children }) => {
+const CaptainProtectWrapper = ({ children }) => {
   const token = localStorage.getItem('token');
+  const navigate = useNavigate();
+  const { captain, setCaptain } = useContext(CaptainDataContext);
+  const [isLoading, setIsLoading] = useState(true);
 
-  // If no token is present, redirect to the login page
-  if (!token) {
-    return <Navigate to="/login" />;
+  useEffect(() => {
+    if (!token) {
+      navigate('/captain-login');
+      return;
+    }
+
+    const fetchCaptainProfile = async () => {
+      try {
+        const response = await axios.get(
+          `${import.meta.env.VITE_BASE_URL}/captains/profile`,
+          {
+            headers: {
+              Authorization: `Bearer ${token}`,
+            },
+          }
+        );
+
+        if (response.status === 200) {
+          setCaptain(response.data.captain);
+          setIsLoading(false);
+        }
+      } catch (error) {
+        console.error('Error fetching captain profile:', error);
+        localStorage.removeItem('token');
+        navigate('/captain-login');
+      }
+    };
+
+    fetchCaptainProfile();
+  }, [token, navigate, setCaptain]);
+
+  if (isLoading) {
+    return <div>Loading...</div>;
   }
 
-  // Render the protected content if the token exists
   return <>{children}</>;
 };
 
-export default CaptainProtectedWrapper;
+export default CaptainProtectWrapper;
