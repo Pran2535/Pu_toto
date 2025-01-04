@@ -1,119 +1,123 @@
-import React, { useState } from 'react';
-import Logo from '../assets/logo.jpg'
-import { X, Navigation, Home, Search, User, MapPin, Flag } from 'lucide-react';
+import React, { useRef, useState } from 'react';
+import Logo from '../assets/logo.jpg';
+import { Search, MapPin, ArrowDown } from 'lucide-react';
+import gsap from 'gsap';
+import LocationPanel from '../components/LocationPanel';
 
 const Start = () => {
-  const [isFormActive, setIsFormActive] = useState(false);
+  const [pickup, setPickup] = useState('');
+  const [destination, setDestination] = useState('');
+  const [panelOpen, setPanelOpen] = useState(false);
+  const panelRef = useRef(null);
 
-  const handleInputFocus = () => setIsFormActive(true);
-  const handleFormClose = () => setIsFormActive(false);
+  const togglePanel = () => {
+    setPanelOpen(!panelOpen);
+  };
+
+  const submitHandler = (e) => {
+    e.preventDefault();
+    if (pickup && destination) {
+      console.log('Booking ride from', pickup, 'to', destination);
+      setPanelOpen(false); // Close the panel after submission
+    }
+  };
+
+  // GSAP animation for panel
+  React.useEffect(() => {
+    if (panelRef.current) {
+      gsap.to(panelRef.current, {
+        height: panelOpen ? '70%' : '0%',
+        duration: 0.5,
+        ease: panelOpen ? 'power2.out' : 'power2.in',
+      });
+    }
+  }, [panelOpen]);
+
+  // Handle focus to ensure panel opens when typing
+  const handleFocus = () => {
+    setPanelOpen(true);
+  };
 
   return (
-    <div className="h-screen w-screen relative bg-gray-100 overflow-hidden">
-      {/* Background with Overlay */}
-      {!isFormActive && (
-        <div className="h-screen w-screen">
-          <div className="absolute inset-0 bg-gradient-to-b from-black/50 to-black/70 z-10" />
-          <img
-            className="h-full w-full object-cover animate-fade-in"
-            src="https://miro.medium.com/v2/resize:fit:1400/0*gwMx05pqII5hbfmX.gif"
-            alt="Dynamic Travel Background"
-          />
-        </div>
-      )}
-
+    <div className="h-screen relative bg-gray-100 font-sans">
       {/* Logo Section */}
-      {!isFormActive && (
-        <div className="absolute top-6 left-6 flex items-center space-x-4 z-20">
-          <div className="relative">
-            <div className="absolute inset-0 bg-white rounded-full animate-pulse" />
-            <img
-              className="w-16 h-16 rounded-full shadow-xl border-2 border-white relative z-10 transform hover:scale-105 transition-all duration-300"
-              src={Logo}
-              alt="Company Logo"
-            />
-          </div>
-          <span className="text-white text-3xl font-bold tracking-wide drop-shadow-lg">
-            Putoto
-          </span>
+      <div className="absolute left-5 top-5 flex items-center gap-2 bg-white p-3 rounded-full shadow-md">
+        <div className="w-12 h-12 rounded-full overflow-hidden bg-blue-600 flex items-center justify-center">
+          <img src={Logo} alt="Logo" className="w-full h-full object-cover" />
         </div>
-      )}
-
-      {/* Booking Form */}
-      <div
-        className={`absolute ${
-          isFormActive ? 'top-0 h-screen' : 'bottom-0'
-        } w-full bg-white/95 backdrop-blur-md p-8 rounded-t-3xl shadow-2xl z-20 transition-all duration-500 ease-in-out`}
-      >
-        {isFormActive && (
-          <button
-            onClick={handleFormClose}
-            className="absolute top-6 right-6 p-2 rounded-full hover:bg-gray-100 transition-colors"
-            aria-label="Close form"
-          >
-            <X className="w-6 h-6 text-gray-600" />
-          </button>
-        )}
-        
-        <h4 className={`${
-          isFormActive ? 'text-2xl mb-8' : 'text-3xl text-center'
-        } font-bold text-gray-800 mb-6`}>
-          Find Your Ride
-        </h4>
-
-        <form className="space-y-6">
-          <div className="relative group">
-            <MapPin className="absolute top-1/2 -translate-y-1/2 left-4 w-5 h-5 text-indigo-600" />
-            <input
-              type="text"
-              placeholder="Add a Pick-up location"
-              className="w-full pl-12 p-4 bg-white border-2 border-gray-200 rounded-xl shadow-sm focus:outline-none focus:border-indigo-500 focus:ring-2 focus:ring-indigo-500/30 transition-all group-hover:border-indigo-300"
-              onFocus={handleInputFocus}
-            />
-          </div>
-
-          <div className="relative group">
-            <Flag className="absolute top-1/2 -translate-y-1/2 left-4 w-5 h-5 text-indigo-600" />
-            <input
-              type="text"
-              placeholder="Enter your Destination"
-              className="w-full pl-12 p-4 bg-white border-2 border-gray-200 rounded-xl shadow-sm focus:outline-none focus:border-indigo-500 focus:ring-2 focus:ring-indigo-500/30 transition-all group-hover:border-indigo-300"
-              onFocus={handleInputFocus}
-            />
-          </div>
-
-          <button
-            type="submit"
-            className="w-full bg-indigo-600 text-white font-semibold p-4 rounded-xl shadow-lg hover:bg-indigo-700 active:transform active:scale-[0.98] transition-all duration-300"
-          >
-            Find Ride
-          </button>
-        </form>
+        <span className="text-blue-600 font-bold text-xl">PUTOTO</span>
       </div>
 
-      {/* Footer Navigation */}
-      {!isFormActive && (
-        <div className="absolute bottom-0 w-full bg-white/90 backdrop-blur-md p-4 shadow-lg z-20">
-          <div className="max-w-md mx-auto flex justify-around items-center">
-            <NavButton icon={<Home />} label="Home" active />
-            <NavButton icon={<Search />} label="Search" />
-            <NavButton icon={<User />} label="Profile" />
+      {/* Map Background */}
+      <div className="h-screen w-screen">
+        <img
+          src="https://miro.medium.com/v2/resize:fit:1400/0*gwMx05pqII5hbfmX.gif"
+          alt="Map"
+          className="w-full h-full object-cover"
+        />
+      </div>
+
+      {/* Main Panel */}
+      <div className="flex flex-col justify-end h-screen absolute top-0 w-full p-5">
+        <div className="rounded-t-3xl p-6 bg-white relative shadow-lg">
+          <div className="flex justify-between items-center mb-4">
+            <h4 className="text-2xl font-bold text-gray-800">Find a Ride</h4>
+            <button onClick={togglePanel} className="p-2 rounded-full hover:bg-gray-100 transition">
+              <ArrowDown
+                className={`text-gray-600 transition-transform ${
+                  panelOpen ? 'rotate-180' : 'rotate-0'
+                }`}
+              />
+            </button>
           </div>
+
+          <form onSubmit={submitHandler} className="space-y-4">
+            <div className="space-y-3">
+              {/* Pickup Location Input */}
+              <div className="relative">
+                <input
+                  value={pickup}
+                  onChange={(e) => setPickup(e.target.value)}
+                  onFocus={handleFocus} // Open panel when focused
+                  type="text"
+                  className="bg-gray-50 px-12 py-3 text-lg rounded-xl w-full border border-gray-200 focus:border-blue-500 focus:ring-2 focus:ring-blue-200 transition-all"
+                  placeholder="Add a pickup location"
+                />
+                <MapPin className="absolute left-4 top-1/2 -translate-y-1/2 text-blue-600" size={20} />
+              </div>
+
+              {/* Destination Location Input */}
+              <div className="relative">
+                <input
+                  value={destination}
+                  onChange={(e) => setDestination(e.target.value)}
+                  onFocus={handleFocus} // Open panel when focused
+                  type="text"
+                  className="bg-gray-50 px-12 py-3 text-lg rounded-xl w-full border border-gray-200 focus:border-red-500 focus:ring-2 focus:ring-red-200 transition-all"
+                  placeholder="Add a drop-off location"
+                />
+                <MapPin className="absolute left-4 top-1/2 -translate-y-1/2 text-red-500" size={20} />
+              </div>
+            </div>
+
+            {/* Submit Button */}
+            <button
+              type="submit"
+              className="mt-4 w-full bg-blue-600 text-white py-3 rounded-xl font-semibold hover:bg-blue-700 transition-colors duration-200 flex items-center justify-center gap-2"
+              disabled={!pickup || !destination}
+            >
+              <Search size={20} />
+              Find Rides
+            </button>
+          </form>
         </div>
-      )}
+
+        <div ref={panelRef} className="bg-white h-0 overflow-hidden">
+          <LocationPanel />
+        </div>
+      </div>
     </div>
   );
 };
-
-const NavButton = ({ icon, label, active }) => (
-  <button className="flex flex-col items-center space-y-1 group p-2">
-    <div className={`${active ? 'text-indigo-600' : 'text-gray-400'} group-hover:scale-110 transition-all duration-300`}>
-      {icon}
-    </div>
-    <span className={`text-sm font-medium ${active ? 'text-indigo-600' : 'text-gray-600'}`}>
-      {label}
-    </span>
-  </button>
-);
 
 export default Start;
