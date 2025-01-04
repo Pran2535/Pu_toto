@@ -1,4 +1,4 @@
-import React, { useRef, useState } from 'react';
+import React, { useRef, useState, useEffect } from 'react';
 import Logo from '../assets/logo.jpg';
 import { Search, MapPin, ArrowDown } from 'lucide-react';
 import gsap from 'gsap';
@@ -8,35 +8,46 @@ const Start = () => {
   const [pickup, setPickup] = useState('');
   const [destination, setDestination] = useState('');
   const [panelOpen, setPanelOpen] = useState(false);
-  const panelRef = useRef(null);
+  const [focusedInput, setFocusedInput] = useState(null);
+  const containerRef = useRef(null);
+  const contentRef = useRef(null);
 
-  const togglePanel = () => {
-    setPanelOpen(!panelOpen);
+  const togglePanel = () => setPanelOpen((prev) => !prev);
+
+  const handleLocationSelect = (location) => {
+    // Only update the input values without closing the panel
+    if (focusedInput === 'pickup') {
+      setPickup(location);
+    } else if (focusedInput === 'destination') {
+      setDestination(location);
+    }
+    // Remove setPanelOpen(false) to keep panel open
   };
 
   const submitHandler = (e) => {
     e.preventDefault();
     if (pickup && destination) {
       console.log('Booking ride from', pickup, 'to', destination);
-      setPanelOpen(false); // Close the panel after submission
+      setPanelOpen(false); // Close panel only on form submission
     }
   };
 
-  // GSAP animation for panel
-  React.useEffect(() => {
-    if (panelRef.current) {
-      gsap.to(panelRef.current, {
-        height: panelOpen ? '70%' : '0%',
-        duration: 0.5,
-        ease: panelOpen ? 'power2.out' : 'power2.in',
-      });
+  // GSAP animation for panel toggle
+  useEffect(() => {
+    const tl = gsap.timeline({ defaults: { ease: 'power4.inOut', duration: 0.8 } });
+
+    if (panelOpen) {
+      tl.to(contentRef.current, { opacity: 0.3, duration: 0.2 })
+        .to(containerRef.current, { height: '100%', borderTopLeftRadius: 0, borderTopRightRadius: 0 })
+        .to(contentRef.current, { opacity: 1, duration: 0.3 });
+      document.body.style.overflow = 'hidden';
+    } else {
+      tl.to(contentRef.current, { opacity: 0.3, duration: 0.2 })
+        .to(containerRef.current, { height: 'auto', borderTopLeftRadius: '24px', borderTopRightRadius: '24px' })
+        .to(contentRef.current, { opacity: 1, duration: 0.3 });
+      document.body.style.overflow = 'auto';
     }
   }, [panelOpen]);
-
-  // Handle focus to ensure panel opens when typing
-  const handleFocus = () => {
-    setPanelOpen(true);
-  };
 
   return (
     <div className="h-screen relative bg-gray-100 font-sans">
@@ -57,14 +68,18 @@ const Start = () => {
         />
       </div>
 
-      {/* Main Panel */}
-      <div className="flex flex-col justify-end h-screen absolute top-0 w-full p-5">
-        <div className="rounded-t-3xl p-6 bg-white relative shadow-lg">
+      {/* Main Container */}
+      <div
+        ref={containerRef}
+        className="absolute bottom-0 left-0 w-full bg-white shadow-lg overflow-hidden transition-all rounded-t-3xl"
+        style={{ height: 'auto', transform: 'translateZ(0)' }}
+      >
+        <div ref={contentRef} className="p-6">
           <div className="flex justify-between items-center mb-4">
             <h4 className="text-2xl font-bold text-gray-800">Find a Ride</h4>
             <button onClick={togglePanel} className="p-2 rounded-full hover:bg-gray-100 transition">
               <ArrowDown
-                className={`text-gray-600 transition-transform ${
+                className={`text-gray-600 transition-transform duration-500 ${
                   panelOpen ? 'rotate-180' : 'rotate-0'
                 }`}
               />
@@ -78,7 +93,10 @@ const Start = () => {
                 <input
                   value={pickup}
                   onChange={(e) => setPickup(e.target.value)}
-                  onFocus={handleFocus} // Open panel when focused
+                  onFocus={() => {
+                    setFocusedInput('pickup');
+                    setPanelOpen(true);
+                  }}
                   type="text"
                   className="bg-gray-50 px-12 py-3 text-lg rounded-xl w-full border border-gray-200 focus:border-blue-500 focus:ring-2 focus:ring-blue-200 transition-all"
                   placeholder="Add a pickup location"
@@ -91,7 +109,10 @@ const Start = () => {
                 <input
                   value={destination}
                   onChange={(e) => setDestination(e.target.value)}
-                  onFocus={handleFocus} // Open panel when focused
+                  onFocus={() => {
+                    setFocusedInput('destination');
+                    setPanelOpen(true);
+                  }}
                   type="text"
                   className="bg-gray-50 px-12 py-3 text-lg rounded-xl w-full border border-gray-200 focus:border-red-500 focus:ring-2 focus:ring-red-200 transition-all"
                   placeholder="Add a drop-off location"
@@ -112,9 +133,12 @@ const Start = () => {
           </form>
         </div>
 
-        <div ref={panelRef} className="bg-white h-0 overflow-hidden">
-          <LocationPanel />
-        </div>
+        {/* Location Panel */}
+        {panelOpen && (
+          <div className="p-4 bg-gray-50 border-t">
+            <LocationPanel onSelectLocation={handleLocationSelect} />
+          </div>
+        )}
       </div>
     </div>
   );
