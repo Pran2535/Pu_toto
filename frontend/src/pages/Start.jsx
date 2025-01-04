@@ -160,6 +160,7 @@ const Start = () => {
                   <div>
                     <h4 className="font-semibold">Toto</h4>
                     <p className="text-gray-600">Affordable</p>
+                    <p className='text-blue-600'>₹10</p>
                   </div>
                   <div className="flex flex-col items-end ml-auto">
                     <div className="flex items-center gap-2">
@@ -181,6 +182,7 @@ const Start = () => {
                   <div>
                     <h4 className="font-semibold">Auto</h4>
                     <p className="text-gray-600">Affordable</p>
+                    <p className='text-blue-600'>₹10</p>
                   </div>
                   <div className="flex flex-col items-end ml-auto">
                     <div className="flex items-center gap-2">
