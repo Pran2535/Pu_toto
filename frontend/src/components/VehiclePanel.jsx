@@ -2,10 +2,10 @@ import React from 'react';
 import Auto from '../assets/auto.png';
 import Toto from '../assets/toto.png';
 
-const VehiclePanel = ({ onReset }) => {
+const VehiclePanel = ({ onReset, onConfirm }) => {
   const vehicles = [
-    { name: 'Toto', img: Toto, availability: 95, color: 'green' },
-    { name: 'Auto', img: Auto, availability: 20, color: 'red' },
+    { name: 'Toto', img: Toto, availability: 95, color: 'green', price: 10 },
+    { name: 'Auto', img: Auto, availability: 20, color: 'red', price: 10 },
   ];
 
   return (
@@ -16,14 +16,19 @@ const VehiclePanel = ({ onReset }) => {
           <div>
             <h4 className="font-semibold">{vehicle.name}</h4>
             <p className="text-gray-600">Affordable</p>
-            <p className="text-blue-600">₹10</p>
+            <p className="text-blue-600">₹{vehicle.price}</p>
           </div>
           <div className="flex flex-col items-end ml-auto">
             <div className="flex items-center gap-2">
               <div className={`w-3 h-6 bg-${vehicle.color}-500 rounded-md`}></div>
               <span className={`text-${vehicle.color}-500 font-semibold`}>{vehicle.availability}%</span>
             </div>
-            <button className={`mt-2 bg-${vehicle.color}-500 text-white py-2 px-4 rounded-xl font-semibold hover:bg-${vehicle.color}-600`}>Confirm Availability</button>
+            <button
+              onClick={() => onConfirm(vehicle)} // Pass the vehicle to the handler
+              className={`mt-2 bg-${vehicle.color}-500 text-white py-2 px-4 rounded-xl font-semibold hover:bg-${vehicle.color}-600`}
+            >
+              Confirm Availability
+            </button>
           </div>
         </div>
       ))}
