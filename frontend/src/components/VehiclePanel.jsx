@@ -11,7 +11,11 @@ const VehiclePanel = ({ onReset, onConfirm }) => {
   return (
     <div className="space-y-4">
       {vehicles.map((vehicle) => (
-        <div key={vehicle.name} className="bg-white p-4 shadow-md rounded-lg flex items-center gap-3">
+        <button
+          key={vehicle.name}
+          onClick={() => onConfirm(vehicle)} // Pass the vehicle to the handler
+          className={`bg-white p-4 shadow-md rounded-lg flex items-center gap-3 w-full focus:outline-none focus:ring-2 focus:ring-black`}
+        >
           <img src={vehicle.img} alt={vehicle.name} className="w-12 h-12 object-cover rounded-full" />
           <div>
             <h4 className="font-semibold">{vehicle.name}</h4>
@@ -23,14 +27,8 @@ const VehiclePanel = ({ onReset, onConfirm }) => {
               <div className={`w-3 h-6 bg-${vehicle.color}-500 rounded-md`}></div>
               <span className={`text-${vehicle.color}-500 font-semibold`}>{vehicle.availability}%</span>
             </div>
-            <button
-              onClick={() => onConfirm(vehicle)} // Pass the vehicle to the handler
-              className={`mt-2 bg-${vehicle.color}-500 text-white py-2 px-4 rounded-xl font-semibold hover:bg-${vehicle.color}-600`}
-            >
-              Confirm Availability
-            </button>
           </div>
-        </div>
+        </button>
       ))}
       <div className="flex justify-center">
         <button

@@ -2,16 +2,28 @@ import React, { useEffect, useRef, useState } from 'react';
 import { MapPin, X } from 'lucide-react';
 import gsap from 'gsap';
 
+const quotes = [
+  "Please wait a while, we're looking for the nearest captains.",
+  "Hang tight! A driver will be with you shortly.",
+  "Thanks for your patience. We're finding the best driver for you.",
+  "Your ride is being arranged. Just a moment!",
+  "We appreciate your patience as we locate your driver.",
+  "Almost there! We're connecting you to a driver."
+];
+
 const WaitForDriver = ({ vehicle, pickup, destination, onReset }) => {
   const componentRef = useRef(null);
   const [showCancelDialog, setShowCancelDialog] = useState(false);
+  const [quote, setQuote] = useState("");
 
   useEffect(() => {
-    gsap.fromTo(
-      componentRef.current,
-      { opacity: 0, y: 20 },
-      { opacity: 1, y: 0, duration: 0.4, ease: "power2.out" }
-    );
+    gsap.fromTo(componentRef.current, { opacity: 0, y: 20 }, { opacity: 1, y: 0, duration: 0.4, ease: "power2.out" });
+
+    const quoteInterval = setInterval(() => {
+      setQuote(quotes[Math.floor(Math.random() * quotes.length)]);
+    }, 60000); // Update quote every minute
+
+    return () => clearInterval(quoteInterval);
   }, []);
 
   const handleCancelRide = () => {
@@ -24,13 +36,7 @@ const WaitForDriver = ({ vehicle, pickup, destination, onReset }) => {
       notification.classList.add('animate-slide-out');
       setTimeout(() => document.body.removeChild(notification), 300);
     }, 3000);
-    gsap.to(componentRef.current, {
-      opacity: 0,
-      y: -20,
-      duration: 0.4,
-      ease: "power2.in",
-      onComplete: () => onReset && onReset(),
-    });
+    gsap.to(componentRef.current, { opacity: 0, y: -20, duration: 0.4, ease: "power2.in", onComplete: onReset });
   };
 
   return (
@@ -45,39 +51,34 @@ const WaitForDriver = ({ vehicle, pickup, destination, onReset }) => {
           <div className="w-2 h-2 bg-blue-600 rounded-full animate-bounce" style={{ animationDelay: '150ms' }}></div>
           <div className="w-2 h-2 bg-blue-600 rounded-full animate-bounce" style={{ animationDelay: '300ms' }}></div>
         </div>
+        {quote && <p className="text-gray-600 italic">{quote}</p>}
       </div>
       <div className="w-full space-y-2 bg-gray-50 p-3 rounded-xl">
         <div className="flex items-start space-x-2">
-          <MapPin className="text-blue-600 mt-1 flex-shrink-0" size={20} />
-          <div className="flex-1">
+          <MapPin className="text-blue-600 mt-1" size={20} />
+          <div>
             <p className="text-sm text-gray-500">Pickup</p>
-            <p className="font-medium break-words">{pickup}</p>
+            <p className="font-medium">{pickup}</p>
           </div>
         </div>
         <div className="flex items-start space-x-2">
-          <MapPin className="text-red-500 mt-1 flex-shrink-0" size={20} />
-          <div className="flex-1">
+          <MapPin className="text-red-500 mt-1" size={20} />
+          <div>
             <p className="text-sm text-gray-500">Destination</p>
-            <p className="font-medium break-words">{destination}</p>
+            <p className="font-medium">{destination}</p>
           </div>
         </div>
       </div>
       <div className="w-full bg-yellow-50 p-3 rounded-xl border border-yellow-200">
         <h4 className="font-semibold text-yellow-800 mb-1">Payment Notice</h4>
         <p className="text-yellow-700">Please pay ₹10 to your driver via:</p>
-        <div className="mt-1 space-y-1">
-          <div className="flex items-center space-x-1">
-            <span className="text-yellow-700">• Cash</span>
-          </div>
-          <div className="flex items-center space-x-1">
-            <span className="text-yellow-700">• UPI</span>
-          </div>
-        </div>
+        <p className="text-yellow-700">• Cash</p>
+        <p className="text-yellow-700">• UPI</p>
         <p className="text-sm text-yellow-600 mt-1">Online payment will be available soon!</p>
       </div>
       <button
         onClick={() => setShowCancelDialog(true)}
-        className="mt-2 px-4 py-2 bg-red-500 text-white rounded-lg shadow hover:bg-red-600 transition-colors"
+        className="mt-2 px-4 py-2 bg-red-500 text-white rounded-lg shadow hover:bg-red-600"
       >
         Cancel Ride
       </button>
@@ -92,16 +93,10 @@ const WaitForDriver = ({ vehicle, pickup, destination, onReset }) => {
             </div>
             <p className="text-gray-600 mb-4">Are you sure you want to cancel this ride?</p>
             <div className="flex space-x-2 justify-end">
-              <button
-                onClick={() => setShowCancelDialog(false)}
-                className="px-3 py-1 text-gray-600 hover:bg-gray-100 rounded-lg transition-colors"
-              >
+              <button onClick={() => setShowCancelDialog(false)} className="px-3 py-1 text-gray-600 hover:bg-gray-100 rounded-lg">
                 No, Keep Ride
               </button>
-              <button
-                onClick={handleCancelRide}
-                className="px-3 py-1 bg-red-500 text-white rounded-lg hover:bg-red-600 transition-colors"
-              >
+              <button onClick={handleCancelRide} className="px-3 py-1 bg-red-500 text-white rounded-lg hover:bg-red-600">
                 Yes, Cancel
               </button>
             </div>
@@ -121,15 +116,9 @@ const WaitForDriver = ({ vehicle, pickup, destination, onReset }) => {
           from { transform: translateY(-20px); opacity: 0; }
           to { transform: translateY(0); opacity: 1; }
         }
-        .animate-slide-in {
-          animation: slide-in 0.3s ease-out forwards;
-        }
-        .animate-slide-out {
-          animation: slide-out 0.3s ease-in forwards;
-        }
-        .animate-dialog-slide-in {
-          animation: dialog-slide-in 0.3s ease-out forwards;
-        }
+        .animate-slide-in { animation: slide-in 0.3s ease-out forwards; }
+        .animate-slide-out { animation: slide-out 0.3s ease-in forwards; }
+        .animate-dialog-slide-in { animation: dialog-slide-in 0.3s ease-out forwards; }
       `}</style>
     </div>
   );
