@@ -128,7 +128,9 @@ const Start = () => {
           </div>
 
           <div ref={confirmRideRef} className={`space-y-4 ${!showConfirmation || showWaitForDriver ? 'hidden' : ''}`} style={{ opacity: 0, transform: 'translateY(20px)' }}>
-            <ConfirmVehicle
+            <ConfirmVehicle 
+            pickup={pickup}
+            destination={destination}
               vehicle={selectedVehicle}
               onBack={() => {
                 gsap.to(confirmRideRef.current, { opacity: 0, y: -20, duration: 0.4, onComplete: () => { setShowConfirmation(false); setSelectedVehicle(null); gsap.to(vehiclesRef.current, { opacity: 1, y: 0, duration: 0.4 }); } });

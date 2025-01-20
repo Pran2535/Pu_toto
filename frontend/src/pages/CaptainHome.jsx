@@ -81,18 +81,26 @@ const CaptainHome = () => {
           className="w-full h-full object-cover"
         />
 
-        {/* Dummy Data Section */}
+        {/* Driver Name Component */}
         <div className="absolute bottom-0 left-0 w-full bg-white p-4 shadow-lg flex items-center justify-between">
           <div className="flex items-center space-x-4">
+            {/* Driver Profile Picture */}
             <img
-              src="https://via.placeholder.com/80"
+              src="https://via.placeholder.com/80" // Replace with actual driver image URL
               alt="Driver"
-              className="w-16 h-16 rounded-full"
+              className="w-16 h-16 rounded-full border-2 border-gray-300"
             />
+            {/* Driver Info */}
             <div>
-              <h4 className="text-lg font-bold text-gray-800">Driver Name</h4>
-              <p className="text-gray-500">Total Hours: 8h</p>
-              <p className="text-gray-500">Total Earnings: ₹400</p>
+              <h4 className="text-xl font-semibold text-gray-800">Harsh Patel</h4>
+              <div className="flex items-center space-x-2">
+                <span className="text-gray-500">Online:</span>
+                <span className="text-gray-800 font-medium">10.2 hours</span>
+              </div>
+              <div className="flex items-center space-x-2">
+                <span className="text-gray-500">Earned:</span>
+                <span className="text-green-600 font-semibold">₹295.20</span>
+              </div>
             </div>
           </div>
         </div>

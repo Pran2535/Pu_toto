@@ -1,6 +1,31 @@
 import React from 'react';
+import axios from 'axios';
 
-const ConfirmVehicle = ({ vehicle, onBack, onBook }) => {
+const ConfirmVehicle = ({ vehicle, pickup, destination, onBack, onBook }) => {
+  const createRide = async () => {
+    try {
+      const response = await axios.post(
+        `${import.meta.env.VITE_BASE_URL}/rides/create`,
+        {
+          pickup,        // Using the pickup prop
+          destination,   // Using the destination prop
+        },
+        {
+          headers: {
+            'Content-Type': 'application/json',
+            Authorization: `Bearer ${localStorage.getItem('token')}`,
+          },
+        }
+      );
+
+      console.log('Ride created successfully:', response.data);
+      onBook(); // Trigger the onBook function after successful booking
+    } catch (error) {
+      console.error('Error creating ride:', error);
+      alert('Failed to create the ride. Please try again.');
+    }
+  };
+
   if (!vehicle) {
     return <p className="text-center text-gray-600">No vehicle selected.</p>;
   }
@@ -41,7 +66,7 @@ const ConfirmVehicle = ({ vehicle, onBack, onBook }) => {
           Back
         </button>
         <button
-          onClick={onBook}
+          onClick={createRide}
           className="bg-green-600 text-white py-2 px-6 rounded-xl font-semibold hover:bg-green-700 transition-all"
         >
           Book Ride
