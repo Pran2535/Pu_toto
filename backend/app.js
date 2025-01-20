@@ -22,6 +22,7 @@ app.use(express.urlencoded({ extended: true }));
 // Routes
 const userRoutes = require("./routes/user.routes");
 const captainRoutes = require("./routes/captain.routes");
+const rideRoutes = require("./routes/ride.routes");
 
 app.get("/", (req, res) => {
   res.send("hello pranav bhai backend sikh rahe ho");
@@ -29,5 +30,6 @@ app.get("/", (req, res) => {
 
 app.use("/user", userRoutes);
 app.use("/captains", captainRoutes);
+app.use("/rides", rideRoutes);
 
 module.exports = app;
