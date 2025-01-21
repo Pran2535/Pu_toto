@@ -1,12 +1,13 @@
-import React, { useRef, useState, useEffect } from 'react';
+import React, { useRef, useState, useEffect, useContext } from 'react';
 import { MapPin, ArrowDown } from 'lucide-react';
 import { useNavigate } from 'react-router-dom'; // Importing useNavigate correctly
 import gsap from 'gsap';
 import { Header } from '../components/header';
 import { RideCard } from '../components/Ridecard';
 import { RideConfirmation } from '../components/RideConfirmation';
-
+import { CaptainDataContext } from '../context/CaptainContext'; // Correct import
 const CaptainHome = () => {
+  const { captain } = useContext(CaptainDataContext); // Corrected useContext reference
   const [panelOpen, setPanelOpen] = useState(false);
   const [selectedRide, setSelectedRide] = useState(null);
   const [showAcceptConfirmation, setShowAcceptConfirmation] = useState(false);
@@ -92,7 +93,7 @@ const CaptainHome = () => {
             />
             {/* Driver Info */}
             <div>
-              <h4 className="text-xl font-semibold text-gray-800">Harsh Patel</h4>
+              <h4 className="text-xl font-semibold text-gray-800">{captain.fullname.firstname} {captain.fullname.lastname}</h4>
               <div className="flex items-center space-x-2">
                 <span className="text-gray-500">Online:</span>
                 <span className="text-gray-800 font-medium">10.2 hours</span>

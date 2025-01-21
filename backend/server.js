@@ -2,7 +2,7 @@ const dotenv = require("dotenv");
 dotenv.config();
 // dotenv ka matlab hai ki hamne dotenv file ka access kar liya hai
 // and dotenv.config() function ka matlab ye hai ki yaha par dotenv file ke sare variable access hona start kar diye hai
-
+const { initializeSocket } = require("./socket");
 const http = require("http");
 // yaha par hamne http ko require kiya hai jisse hame server banane me kafi help hogi
 
@@ -18,6 +18,8 @@ app.use(cors());
 
 const server = http.createServer(app);
 // yaha par hamne server banaya hai http module ke .createServer method ka use karke, jo humare app ko handle karega
+
+initializeSocket(server); // initialize socket.io server with our http server
 
 server.listen(port, () => {
   console.log(`Server is listening on port ${port}`);
