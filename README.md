@@ -1,31 +1,86 @@
-# User Registration Endpoint
+# Punjab University Toto Booking System
 
-## Description
+## Overview
+A full-stack web application for booking toto (shuttle) services within Punjab University, Chandigarh, built using MERN stack and Socket.IO.
 
-This endpoint allows users to register by providing their first name, last name, email, and password. Upon successful registration, a JWT token is generated and returned along with the user details.
+## Features
+- User Registration & Authentication
+- Real-time Toto Availability Tracking
+- Booking Management
+- Route Visualization
+- Live Location Tracking
 
-## Endpoint
+## Technology Stack
+- **Frontend**: React.js
+- **Backend**: Node.js, Express.js
+- **Database**: MongoDB
+- **Real-time Communication**: Socket.IO
+- **Authentication**: JSON Web Tokens (JWT)
 
-`POST /user/register`
+## Prerequisites
+- Node.js (v16+)
+- MongoDB
+- npm/yarn
 
-## Request Body
+## Setup Instructions
 
-The request body should be a JSON object containing the following fields:
+### 1. Clone Repository
+```bash
+git clone https://github.com/yourusername/ptu-toto-booking.git
+cd ptu-toto-booking
+```
 
-- `fullname.firstname` (string, required): The first name of the user. Must be at least 3 characters long.
-- `fullname.lastname` (string, optional): The last name of the user. Must be at least 3 characters long if provided.
-- `email` (string, required): The email address of the user. Must be a valid email format and at least 5 characters long.
-- `password` (string, required): The password for the user account. Must be at least 6 characters long.
+### 2. Install Dependencies
+```bash
+# Backend dependencies
+cd backend
+npm install
 
-Example:
+# Frontend dependencies
+cd ../frontend
+npm install
+```
 
-```json
-{
-  "fullname": {
-    "firstname": "John",
-    "lastname": "Doe"
-  },
-  "email": "john.doe@example.com",
-  "password": "password123"
-}
+### 3. Environment Configuration
+Create `.env` files in backend and frontend directories:
+
+**Backend `.env`**:
+```
+MONGODB_URI=your_mongodb_connection_string
+JWT_SECRET=your_jwt_secret
+PORT=5000
+```
+
+**Frontend `.env`**:
+```
+REACT_APP_API_URL=http://localhost:5000
+```
+
+### 4. Run Application
+```bash
+# Start Backend (from backend directory)
+npm run start
+
+# Start Frontend (from frontend directory)
+npm run start
+```
+
+## Deployment
+- Backend: Recommended on Render/Heroku
+- Frontend: Recommended on Netlify/Vercel
+- Database: MongoDB Atlas
+
+## Contributing
+1. Fork Repository
+2. Create Feature Branch
+3. Commit Changes
+4. Push to Branch
+5. Open Pull Request
+
+## License
+MIT License
+
+## Contact
+**Project Maintainer**: [Pranav Kumar]
+**Email**: contact@example.com
 ```
