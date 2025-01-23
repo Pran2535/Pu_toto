@@ -19,16 +19,15 @@ function getOtp(num) {
 // Example usage
 // This will always print a 4-digit OTP
 
-module.exports.createRide = async ({ user, pickup, destination }) => {
+module.exports.createRide = async ({ pickup, destination }) => {
   // Validate input
-  if (!user || !pickup || !destination) {
+  if (!pickup || !destination) {
     throw new Error("All fields are required");
   }
 
   try {
     // Create a new ride
     const ride = await rideModel.create({
-      user,
       pickup,
       destination,
       otp: getOtp(4), // Generate a four-digit OTP for the ride

@@ -20,9 +20,9 @@ const CaptainHome = () => {
   const availableRides = [
     {
       id: 1,
-      passenger: "John Doe",
-      pickup: "Uiet Chandigarh, PU South Campus",
-      destination: "AC Joshi Library, PU",
+      passenger: "Pranav Kumar",
+      pickup: "Uiet Chandigarh, Panjab university south campus South Campus",
+      destination: "AC Joshi Library, Panjab university student section",
       fare: 10,
       distance: "1.2 km",
       time: "2 mins ago",
@@ -41,7 +41,7 @@ const CaptainHome = () => {
   useEffect(() => {
     const timer = setTimeout(() => {
       setShowPanelAfterDelay(true);
-    }, 3000); // Show the panel after 3 seconds
+    }, 18000); // Show the panel after 3 seconds
     return () => clearTimeout(timer);
   }, []);
 

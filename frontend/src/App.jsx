@@ -26,9 +26,9 @@ const App = () => {
       <Route
         path="/"
         element={
-          <UserProtectWrapper>
+         
             <Home />
-          </UserProtectWrapper>
+          
         }
       />
       <Route
